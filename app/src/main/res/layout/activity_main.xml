@@ -13,11 +13,25 @@
 
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
         android:text="Sign In"
         android:onClick="signin"
-        android:id="@+id/signin_btn"/>
+        android:id="@+id/signin_btn"
+        android:layout_marginTop="83dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Create Account"
+        android:onClick="createAccount"
+        android:id="@+id/createAccount_btn"
+        android:layout_below="@+id/signin_btn"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="11dp" />
 
 </RelativeLayout>

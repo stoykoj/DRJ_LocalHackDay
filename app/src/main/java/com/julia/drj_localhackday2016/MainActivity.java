@@ -16,6 +16,10 @@ public class MainActivity extends AppCompatActivity {
     public void signin(View view){
         Intent intent = new Intent(this, MainScreen.class);
         startActivity(intent);
-
     }
+    public void createAccound(View view) {
+        Intent intent = new Intent(this, MainScreen.class); //change this to createAccount screen
+        startActivity(intent);
+    }
+
 }
