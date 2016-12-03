@@ -25,6 +25,7 @@
         android:layout_below="@id/usernameIn"
         android:inputType="textPassword"
         android:hint="Enter Password:"
+        android:fontFamily="@string/app_name"
         android:id="@+id/passwordIn"
         android:textAlignment="center"
         android:textSize="30dp"

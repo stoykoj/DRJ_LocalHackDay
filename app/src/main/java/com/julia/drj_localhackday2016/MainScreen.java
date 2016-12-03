@@ -10,6 +10,7 @@ import android.view.View;
  */
 
 public class MainScreen extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +22,7 @@ public class MainScreen extends AppCompatActivity {
     }
 
     public void goDatabase(View view){
-        Intent intent = new Intent(this, ViewableDB.class);
+        Intent intent = new Intent(this, ListActivity.class); //change back to ViewableDB.class
         startActivity(intent);
     }
 }

@@ -25,5 +25,5 @@
         android:onClick="goDatabase"
         android:layout_below="@id/addTabBtn"
         />
-
+    
 </RelativeLayout>
