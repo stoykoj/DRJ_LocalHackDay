@@ -15,9 +15,13 @@ public class MainScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainscreen_layout);
     }
-
     public void goAddTab(View view){
-        Intent intent = new Intent(this, AddTab.class);
+        Intent intent = new Intent(this, addTab.class);
+        startActivity(intent);
+    }
+
+    public void goDatabase(View view){
+        Intent intent = new Intent(this, ViewableDB.class);
         startActivity(intent);
     }
 }
