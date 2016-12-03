@@ -24,6 +24,9 @@
         android:text="See Database"
         android:onClick="goDatabase"
         android:layout_below="@id/addTabBtn"
-        />
+        android:id="@+id/button" />
+
+
+
 
 </RelativeLayout>

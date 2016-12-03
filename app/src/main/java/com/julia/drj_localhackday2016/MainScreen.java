@@ -21,7 +21,8 @@ public class MainScreen extends AppCompatActivity {
     }
 
     public void goDatabase(View view){
-        Intent intent = new Intent(this, ViewableDB.class);
-        startActivity(intent);
+        startActivity(new Intent(this, DisplayReceipts.class));
+        // Intent intent = new Intent(this, ViewableDB.class);
+       // startActivity(intent);
     }
 }
