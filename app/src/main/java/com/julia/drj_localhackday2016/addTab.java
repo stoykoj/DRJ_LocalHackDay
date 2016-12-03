@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,12 +15,11 @@ import java.util.List;
  * Created by Julia on 2016-12-03.
  */
 
-public class addTab extends AppCompatActivity {
+public class AddTab extends AppCompatActivity {
     private String otherUser;
     private EditText inOtherUser;
     private Spinner debtorSpin;
     private Spinner debteeSpin;
-    private EditText moneyIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +27,11 @@ public class addTab extends AppCompatActivity {
         setContentView(R.layout.addtab_layout);
         inOtherUser = (EditText) findViewById(R.id.other_user_input);
         //debtorSpin = (Spinner) findViewById(R.id.debtor_spinner);
-        moneyIn = (EditText)findViewById(R.id.dollar_amt);
         addItemsDebtorSpinner();
         addItemsDebteeSpinner();
     }
 
     public void confirmTab(View view){
-        //do something with
         Intent intent = new Intent(this, MainScreen.class);
         startActivity(intent);
     }
@@ -85,5 +83,4 @@ public class addTab extends AppCompatActivity {
 
 
 }
-
 
