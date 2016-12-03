@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,22 +43,29 @@ public class addTab extends AppCompatActivity {
 
     public void confirmBtn(View view){
         otherUser = (String)inOtherUser.getText().toString();
-        debtorSpin = (Spinner) findViewById(R.id.debtor_spinner);
-        List<String> list = new ArrayList<String>();
-        list.add("You");
-        list.add(otherUser);
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        debtorSpin.setAdapter(dataAdapter);
-        debteeSpin = (Spinner) findViewById(R.id.debtee_spinner);
-        List<String> list2 = new ArrayList<String>();
-        list2.add("You");
-        list2.add(otherUser);
-        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, list);
-        dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        debteeSpin.setAdapter(dataAdapter2);
+
+        if (((MyApp) this.getApplication()).usrInDB(otherUser)) {
+            debtorSpin = (Spinner) findViewById(R.id.debtor_spinner);
+            List<String> list = new ArrayList<String>();
+            list.add("You");
+            list.add(otherUser);
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_item, list);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            debtorSpin.setAdapter(dataAdapter);
+            debteeSpin = (Spinner) findViewById(R.id.debtee_spinner);
+            List<String> list2 = new ArrayList<String>();
+            list2.add("You");
+            list2.add(otherUser);
+            ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_item, list);
+            dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            debteeSpin.setAdapter(dataAdapter2);
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Username not found in database", Toast.LENGTH_LONG).show();
+            inOtherUser.setText("");
+        }
     }
 
     public void addItemsDebtorSpinner(){
