@@ -94,9 +94,9 @@
         android:layout_below="@id/caText4"
         android:layout_marginTop="50dp"
         android:background="#e23b3b"
+        android:onClick="confirmCreate"
         android:text="Create Account"
         android:textSize="30dp"
-        android:onClick="confirmCreate"
         android:id="@+id/confirmCreate_btn"
         />
 </RelativeLayout>
