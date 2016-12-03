@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void createAccount(View view) {
-        Intent intent = new Intent(this, MainScreen.class); //change this to createAccount screen
+        Intent intent = new Intent(this, CreateAccount.class);
         startActivity(intent);
     }
 
