@@ -1,7 +1,9 @@
 package com.julia.drj_localhackday2016;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -21,6 +23,7 @@ public class addTab extends AppCompatActivity {
     private EditText inOtherUser;
     private Spinner debtorSpin;
     private Spinner debteeSpin;
+    private EditText amount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +36,36 @@ public class addTab extends AppCompatActivity {
     }
 
     public void confirmTab(View view){
-        Intent intent = new Intent(this, MainScreen.class);
-        startActivity(intent);
+        boolean confirmed = false;
+        String debtor, debtee;
+        debtorSpin = (Spinner)findViewById(R.id.debtor_spinner);
+        debtor = debtorSpin.getSelectedItem().toString();
+        debteeSpin = (Spinner)findViewById(R.id.debtee_spinner);
+        debtee = debteeSpin.getSelectedItem().toString();
+        amount = (EditText)findViewById(R.id.dollar_amt);
+        String amt = amount.getText().toString();
+        String message = debtor +" owe(s) " +debtee +" $" +amt;
+        final Intent intent = new Intent(this, MainScreen.class);
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm Tab")
+                .setMessage("Confirm this tab: " +message)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        startActivity(intent);
+                    }
+
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        amount.setText("");
+                        inOtherUser.setText("");
+                        addItemsDebteeSpinner();
+                        addItemsDebtorSpinner();
+                    }}).show();
+
     }
     public void cancelTab(View view){
         Intent intent = new Intent(this, MainScreen.class);
