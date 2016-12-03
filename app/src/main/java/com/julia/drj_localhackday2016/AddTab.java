@@ -31,6 +31,15 @@ public class AddTab extends AppCompatActivity {
         addItemsDebteeSpinner();
     }
 
+    public void confirmTab(View view){
+        Intent intent = new Intent(this, MainScreen.class);
+        startActivity(intent);
+    }
+    public void cancelTab(View view){
+        Intent intent = new Intent(this, MainScreen.class);
+        startActivity(intent);
+    }
+
     public void confirmBtn(View view){
         otherUser = (String)inOtherUser.getText().toString();
         debtorSpin = (Spinner) findViewById(R.id.debtor_spinner);
