@@ -16,6 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainScreen"></activity>
+        <activity android:name=".AddTab"></activity>
     </application>
 
 </manifest>
