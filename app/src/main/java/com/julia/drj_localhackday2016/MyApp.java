@@ -19,12 +19,12 @@ public class MyApp extends Application {
         db.deleteUser(usrname);
     }
 
-    public void addDebt(String usr1, String usr2, String amt){
-        db.addDebt(usr1, usr2, Float.parseFloat(amt));
+    public void addDebt(String otherUsr,  String amt){
+        db.addDebt(otherUsr, Float.parseFloat(amt));
     }
 
-    public void deleteDebt(String usr1, String usr2){
-        db.deleteDebt(usr1, usr2);
+    public void deleteDebt(String otherUsr){
+        db.deleteDebt(otherUsr);
     }
 
     public String dbToString(){

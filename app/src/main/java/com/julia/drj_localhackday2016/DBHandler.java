@@ -18,9 +18,18 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_PASSWORD = "password";
 
     public static final String TABLE_DEBTS = "Debts";
-    public static final String COLUMN_USR1 = "_usr1";
-    public static final String COLUMN_USR2 = "_usr2";
+    public static final String COLUMN_OTHER_USR = "OtherUser";
     public static final String COLUMN_AMT = "amount";
+
+    private static final String query = "CREATE TABLE " +TABLE_USERS +"(" +
+            COLUMN_USERNAME +" VARCHAR PRIMARY KEY, " +
+            COLUMN_PASSWORD +" TEXT " +
+            ");";
+
+    private static final String query2 = "CREATE TABLE " +TABLE_DEBTS +"(" +
+            COLUMN_OTHER_USR +" VARCHAR PRIMARY KEY, " +
+            COLUMN_AMT +" REAL, "+
+            ");";
 
     public DBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -28,16 +37,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query = "CREATE TABLE " +TABLE_USERS +"(" +
-                COLUMN_USERNAME +" VARCHAR PRIMARY KEY, " +
-                COLUMN_PASSWORD +" TEXT " +
-                ");";
-
-        String query2 = "CREATE TABLE " +TABLE_DEBTS +"(" +
-                COLUMN_USR1 +" VARCHAR PRIMARY KEY, " +
-                COLUMN_USR2 +" VARCHAR PRIMARY KEY, " +
-                COLUMN_AMT +" REAL"+
-                ");";
         db.execSQL(query);
         db.execSQL(query2);
     }
@@ -45,6 +44,7 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " +TABLE_USERS);
+        db.execSQL("DROP TABLE IF EXISTS " +TABLE_DEBTS);
         onCreate(db);
 
     }
@@ -67,21 +67,22 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     // add a debt to the database
-    public void addDebt(String usr1, String usr2, float amt){
+    public void addDebt(String otherUsr, float amt){
         ContentValues values = new ContentValues();
-        values.put(COLUMN_USR1, usr1);
-        values.put(COLUMN_USR2, usr2);
-        values.put(COLUMN_AMT, amt);
-        SQLiteDatabase db = getWritableDatabase();
-        db.insert(TABLE_DEBTS, null, values);
-        db.close();
+        if (usrInDB(otherUsr)) {
+            values.put(COLUMN_OTHER_USR, otherUsr);
+            values.put(COLUMN_AMT, amt);
+            SQLiteDatabase db = getWritableDatabase();
+            db.insert(TABLE_DEBTS, null, values);
+            db.close();
+        }
     }
 
     //delete a debt from the db
-    public void deleteDebt(String usr1, String usr2){
+    public void deleteDebt(String otherUsr){
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " +TABLE_USERS +" WHERE " +
-                COLUMN_USR1 +"=\"" +usr1 +"\" AND " +COLUMN_USR2 +"=\"" +usr2 +"\";");
+                COLUMN_OTHER_USR +"=\"" +otherUsr +"\";");
     }
 
     public String getStoredPassword(String usrname){
@@ -131,7 +132,7 @@ public class DBHandler extends SQLiteOpenHelper {
             recordSet.moveToNext();
         }
 
-        String query2 = "SELECT * FROM " + TABLE_DEBTS;// why not leave out the WHERE  clause?
+        String query2 = "SELECT * FROM " + TABLE_DEBTS;
 
         //Cursor points to a location in your results
         /*Cursor recordSet2 = db.rawQuery(query2, null);
@@ -142,9 +143,8 @@ public class DBHandler extends SQLiteOpenHelper {
             //Position after the last row means the end of the results
             while (!recordSet2.isAfterLast()) {
                 // null could happen if we used our empty constructor
-                if (recordSet2.getString(recordSet.getColumnIndex(COLUMN_USR1)) != null) {
-                    dbString += "User 1: " + recordSet2.getString(recordSet.getColumnIndex(COLUMN_USR1));
-                    dbString += " User 2: " + recordSet2.getString(recordSet.getColumnIndex(COLUMN_USR2));
+                if (recordSet2.getString(recordSet.getColumnIndex(COLUMN_OTHER_USR)) != null) {
+                    dbString += "Other User: " + recordSet2.getString(recordSet.getColumnIndex(COLUMN_OTHER_USR));
                     dbString += " Amount: " + recordSet2.getString(recordSet.getColumnIndex(COLUMN_AMT));
                     dbString += "\n";
                 }
