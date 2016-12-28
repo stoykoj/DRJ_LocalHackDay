@@ -28,6 +28,15 @@
         android:layout_alignBaseline="@id/addTabBtn"
         android:id="@+id/database_btn"
         />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log Out"
+        android:id="@+id/log_out"
+        android:layout_toRightOf="@id/database_btn"
+        android:layout_alignBaseline="@id/database_btn"
+        android:onClick="goLogout"
+        />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

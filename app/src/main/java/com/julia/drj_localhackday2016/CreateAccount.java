@@ -75,6 +75,7 @@ public class CreateAccount extends AppCompatActivity {
         }
 
         if (confirmed) {
+            ((MyApp) this.getApplication()).setCurrentUsr(newUsr);
             ((MyApp) this.getApplication()).addUserToDB(newUsr, pw.getText().toString());
             Intent intent = new Intent(this, MainScreen.class);
             startActivity(intent);

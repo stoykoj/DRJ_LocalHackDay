@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
             String storedPw = ((MyApp) this.getApplication()).getPw(usr);
             if (pw.equals(storedPw)) {
                 Intent intent = new Intent(this, MainScreen.class);
+                ((MyApp) this.getApplication()).setCurrentUsr(usr);
                 startActivity(intent);
             } else {
                 Toast.makeText(getApplicationContext(), "Incorrect Password", Toast.LENGTH_LONG).show();

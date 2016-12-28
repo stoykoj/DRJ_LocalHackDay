@@ -66,10 +66,10 @@ public class addTab extends AppCompatActivity {
                         addItemsDebtorSpinner();
                     }}).show();
         String otherUsr;
-        if (debtor.equals("You")){otherUsr = debtee;
-            ((MyApp) this.getApplication()).addDebt(otherUsr, amt);}
+        if (debtor.equals("You")){//otherUsr = debtee;
+            ((MyApp) this.getApplication()).addDebt(((MyApp) this.getApplication()).getCurrentUsr(), debtee, amt);}
         else if (debtee.equals("You")){otherUsr = debtor;
-            ((MyApp) this.getApplication()).addDebt(otherUsr, amt);}
+            ((MyApp) this.getApplication()).addDebt(debtor, ((MyApp) this.getApplication()).getCurrentUsr(), amt);}
         else{
             Toast.makeText(getApplicationContext(), "Invalid entry", Toast.LENGTH_LONG).show();
         }

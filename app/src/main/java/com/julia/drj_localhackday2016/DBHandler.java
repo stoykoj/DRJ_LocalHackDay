@@ -20,7 +20,8 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_PASSWORD = "password";
 
     public static final String TABLE_DEBTS = "Debts";
-    public static final String COLUMN_OTHER_USR = "OtherUser";
+    public static final String COLUMN_DEBTOR = "Debtor";
+    public static final String COLUMN_DEBTEE = "Debtee";
     public static final String COLUMN_AMT = "amount";
 
     private static final String query = "CREATE TABLE " +TABLE_USERS +"(" +
@@ -29,8 +30,10 @@ public class DBHandler extends SQLiteOpenHelper {
             ");";
 
     private static final String query2 = "CREATE TABLE " +TABLE_DEBTS +"(" +
-            COLUMN_OTHER_USR +" VARCHAR PRIMARY KEY, " +
-            COLUMN_AMT +" REAL"+
+            COLUMN_DEBTOR +" VARCHAR NOT NULL, " +
+            COLUMN_DEBTEE +" VARCHAR NOT NULL, " +
+            COLUMN_AMT +" REAL, "+
+            "PRIMARY KEY(" + COLUMN_DEBTOR + "," + COLUMN_DEBTEE + ")" +
             ");";
 
     public DBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -51,6 +54,23 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
+    public void updateDebt(String debtor, String debtee, float difference){
+        String query;
+        /*query = "SELECT " +COLUMN_AMT
+                +" FROM " +TABLE_DEBTS +" WHERE " + COLUMN_DEBTOR +" = \"" +debtor
+                +"\" AND " +COLUMN_DEBTEE +" = \"" +debtee +"\";";*/
+
+        query = "UPDATE "+TABLE_DEBTS
+                +" SET " +COLUMN_AMT +" = " +COLUMN_AMT + difference + " WHERE " + COLUMN_DEBTOR +" = \"" +debtor
+                +"\" AND " +COLUMN_DEBTEE +" = \"" +debtee +"\";";
+        SQLiteDatabase db = getWritableDatabase();
+        //Cursor points to a location in your results
+        Cursor recordSet = db.rawQuery(query, null);
+        //Move to the first row in your results
+        recordSet.moveToFirst();
+
+    }
+
     public ArrayList<ArrayList<String>> getDebts(){
         ArrayList<ArrayList<String>> result = new ArrayList<>();
         ArrayList<String> innerList = new ArrayList<>();
@@ -68,8 +88,9 @@ public class DBHandler extends SQLiteOpenHelper {
             //Position after the last row means the end of the results
             while (!recordSet2.isAfterLast()) {
                 // null could happen if we used our empty constructor
-                if (recordSet2.getString(recordSet2.getColumnIndex(COLUMN_OTHER_USR)) != null) {
-                    innerList.add(recordSet2.getString(recordSet2.getColumnIndex(COLUMN_OTHER_USR)));
+                if (recordSet2.getString(recordSet2.getColumnIndex(COLUMN_DEBTOR)) != null) {
+                    innerList.add(recordSet2.getString(recordSet2.getColumnIndex(COLUMN_DEBTOR)));
+                    innerList.add(recordSet2.getString(recordSet2.getColumnIndex(COLUMN_DEBTEE)));
                     innerList.add(recordSet2.getString(recordSet2.getColumnIndex(COLUMN_AMT)));
                     result.add(innerList);
                     innerList = new ArrayList<> ();
@@ -106,11 +127,20 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     // add a debt to the database
-    public void addDebt(String otherUsr, float amt){
+    public void addDebt(String debtor, String debtee, float amt){
         ContentValues values = new ContentValues();
-        if (usrInDB(otherUsr)) {
-            values.put(COLUMN_OTHER_USR, otherUsr);
+        if (usrInDB(debtor) && usrInDB(debtee)) {
+            values.put(COLUMN_DEBTOR, debtor);
+            values.put(COLUMN_DEBTEE, debtee);
             values.put(COLUMN_AMT, amt);
+            SQLiteDatabase db = getWritableDatabase();
+            db.insert(TABLE_DEBTS, null, values);
+            db.close();
+        }
+        else{
+            values.put(COLUMN_DEBTOR, "error");
+            values.put(COLUMN_DEBTEE, "error");
+            values.put(COLUMN_AMT, 4.2);
             SQLiteDatabase db = getWritableDatabase();
             db.insert(TABLE_DEBTS, null, values);
             db.close();
@@ -118,10 +148,10 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     //delete a debt from the db
-    public void deleteDebt(String otherUsr){
+    public void deleteDebt(String debtor, String debtee){
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " +TABLE_USERS +" WHERE " +
-                COLUMN_OTHER_USR +"=\"" +otherUsr +"\";");
+                COLUMN_DEBTOR +"=\"" +debtor +"\" AND " +COLUMN_DEBTEE +"=\"" +debtee +"\";");
     }
 
     public String getStoredPassword(String usrname){
@@ -171,7 +201,7 @@ public class DBHandler extends SQLiteOpenHelper {
             recordSet.moveToNext();
         }
 
-        String query2 = "SELECT * FROM " + TABLE_DEBTS +" WHERE 1";
+        String query2 = "SELECT * FROM " + TABLE_DEBTS;
 
         //Cursor points to a location in your results
         Cursor recordSet2 = db.rawQuery(query2, null); // for the Debts table
@@ -182,10 +212,15 @@ public class DBHandler extends SQLiteOpenHelper {
             //Position after the last row means the end of the results
             while (!recordSet2.isAfterLast()) {
                 // null could happen if we used our empty constructor
-                if (recordSet2.getString(recordSet2.getColumnIndex(COLUMN_OTHER_USR)) != null) {
-                    dbString += "Other User: " + recordSet2.getString(recordSet2.getColumnIndex(COLUMN_OTHER_USR));
+                if (recordSet2.getString(recordSet2.getColumnIndex(COLUMN_DEBTOR)) != null) {
+                    /*dbString += "Other User: " + recordSet2.getString(recordSet2.getColumnIndex(COLUMN_OTHER_USR));
                     dbString += " Amount: " + recordSet2.getString(recordSet2.getColumnIndex(COLUMN_AMT));
-                    dbString += "\n";
+                    dbString += "\n";*/
+
+                    dbString += recordSet2.getString(recordSet2.getColumnIndex(COLUMN_DEBTOR)) + " owes "
+                            +recordSet2.getString(recordSet2.getColumnIndex(COLUMN_DEBTEE))
+                            +" $" +recordSet2.getString(recordSet2.getColumnIndex(COLUMN_AMT));
+
                 }
                 recordSet2.moveToNext();
             }

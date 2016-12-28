@@ -36,11 +36,16 @@ public class MainScreen extends AppCompatActivity {
 
         ArrayList<ArrayList<String>> debts = ((MyApp) this.getApplication()).getDebts();
         for (int i=0; i<debts.size(); i++){
-            updateList("You", debts.get(i).get(0), debts.get(i).get(1));
+            if (debts.get(i).get(0).equals(((MyApp) this.getApplication()).getCurrentUsr())) {
+                updateListOwe(debts.get(i).get(1), debts.get(i).get(2));
+            }
+            else if (debts.get(i).get(1).equals(((MyApp) this.getApplication()).getCurrentUsr())) {
+                updateListOwes(debts.get(i).get(0), debts.get(i).get(2));
+            }
         }
 
-        updateList("You", "Jan", "44");
-        updateList("Bill", "You", "76");
+        /*updateList("You", "Jan", "44");
+        updateList("Bill", "You", "76");*/
 
     }
     public void goAddTab(View view){
@@ -53,13 +58,55 @@ public class MainScreen extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void goLogout(View view){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
     public void updateList1(String usr1, String usr2, String amt){
         String prev = list1.getText().toString();
         String update = usr1 +" owe(s) " +usr2 +" $" +amt;
         list1.setText(prev +"\n" +update);
     }
 
+    public void updateListOwe(String otherUsr, String amt){
+        linear = (LinearLayout)findViewById(R.id.linear);
+        linear.setOrientation(LinearLayout.VERTICAL);
+        if (posn < max){
+            list[posn] = new Button(this);
+            list[posn].setHeight(50);
+            list[posn].setWidth(50);
+            list[posn].setTag(posn);
+            list[posn].setText("You owe " +otherUsr +" $" +amt);
+            list[posn].setOnClickListener(btnClicked);
+
+            linear.addView(list[posn]);
+            posn++;
+        }
+    }
+
+    public void updateListOwes(String otherUsr, String amt){
+        linear = (LinearLayout)findViewById(R.id.linear);
+        linear.setOrientation(LinearLayout.VERTICAL);
+        if (posn < max){
+            list[posn] = new Button(this);
+            list[posn].setHeight(50);
+            list[posn].setWidth(50);
+            list[posn].setTag(posn);
+            list[posn].setText(otherUsr +" owes you $" +amt);
+            list[posn].setOnClickListener(btnClicked);
+
+            linear.addView(list[posn]);
+            posn++;
+        }
+    }
+
+    public void removeDebtFromDB(String debtor, String debtee){
+        ((MyApp) this.getApplication()).deleteDebt(debtor, debtee);
+    }
+
     public void updateList(String usr1, String usr2, String amt){
+
         linear = (LinearLayout)findViewById(R.id.linear);
         linear.setOrientation(LinearLayout.VERTICAL);
         if (posn < max){
@@ -72,13 +119,13 @@ public class MainScreen extends AppCompatActivity {
 
             linear.addView(list[posn]);
             posn++;
-
         }
     }
 
     View.OnClickListener btnClicked = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
             final Object tag = v.getTag();
             final LinearLayout linear2 = (LinearLayout)findViewById(R.id.linear);
             new AlertDialog.Builder(context)
@@ -90,6 +137,7 @@ public class MainScreen extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Yay", Toast.LENGTH_SHORT).show();
                             //list[Integer.parseInt(tag.toString())] = null;
                             linear2.removeView(list[Integer.parseInt(tag.toString())]);
+                           // removeDebtFromDB(debtor, debtee);
 
                         }
                     })
