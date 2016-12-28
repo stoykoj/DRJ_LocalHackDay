@@ -17,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         usrIn = (EditText)findViewById(R.id.usernameIn);
         pwIn = (EditText)findViewById(R.id.passwordIn);
+        
+//        setContentView( new CanvasView( this ) );
 
     }
 
