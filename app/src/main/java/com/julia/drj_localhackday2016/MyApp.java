@@ -3,6 +3,8 @@ package com.julia.drj_localhackday2016;
 import android.app.Application;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 /**
  * Created by Julia on 2016-12-03.
  */
@@ -26,6 +28,8 @@ public class MyApp extends Application {
     public void deleteDebt(String otherUsr){
         db.deleteDebt(otherUsr);
     }
+
+    public ArrayList<ArrayList<String>> getDebts(){ return db.getDebts();}
 
     public String dbToString(){
         return db.dataBaseToString();

@@ -65,6 +65,15 @@ public class addTab extends AppCompatActivity {
                         addItemsDebteeSpinner();
                         addItemsDebtorSpinner();
                     }}).show();
+        String otherUsr;
+        if (debtor.equals("You")){otherUsr = debtee;
+            ((MyApp) this.getApplication()).addDebt(otherUsr, amt);}
+        else if (debtee.equals("You")){otherUsr = debtor;
+            ((MyApp) this.getApplication()).addDebt(otherUsr, amt);}
+        else{
+            Toast.makeText(getApplicationContext(), "Invalid entry", Toast.LENGTH_LONG).show();
+        }
+
 
     }
     public void cancelTab(View view){

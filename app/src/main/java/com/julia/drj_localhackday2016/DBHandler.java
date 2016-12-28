@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 /**
  * Created by Julia on 2016-12-03.
  */
@@ -28,7 +30,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private static final String query2 = "CREATE TABLE " +TABLE_DEBTS +"(" +
             COLUMN_OTHER_USR +" VARCHAR PRIMARY KEY, " +
-            COLUMN_AMT +" REAL, "+
+            COLUMN_AMT +" REAL"+
             ");";
 
     public DBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -47,6 +49,43 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " +TABLE_DEBTS);
         onCreate(db);
 
+    }
+
+    public ArrayList<ArrayList<String>> getDebts(){
+        ArrayList<ArrayList<String>> result = new ArrayList<>();
+        ArrayList<String> innerList = new ArrayList<>();
+        //String dbString = "";
+        SQLiteDatabase db = getWritableDatabase();
+
+        String query2 = "SELECT * FROM " + TABLE_DEBTS +" WHERE 1";
+
+        //Cursor points to a location in your results
+        Cursor recordSet2 = db.rawQuery(query2, null); // for the Debts table
+        if (recordSet2.getCount() != 0) {
+            //Move to the first row in your results
+            recordSet2.moveToFirst();
+
+            //Position after the last row means the end of the results
+            while (!recordSet2.isAfterLast()) {
+                // null could happen if we used our empty constructor
+                if (recordSet2.getString(recordSet2.getColumnIndex(COLUMN_OTHER_USR)) != null) {
+                    innerList.add(recordSet2.getString(recordSet2.getColumnIndex(COLUMN_OTHER_USR)));
+                    innerList.add(recordSet2.getString(recordSet2.getColumnIndex(COLUMN_AMT)));
+                    result.add(innerList);
+                    innerList = new ArrayList<> ();
+
+                    /*dbString += "Other User: " + recordSet2.getString(recordSet2.getColumnIndex(COLUMN_OTHER_USR));
+                    dbString += " Amount: " + recordSet2.getString(recordSet2.getColumnIndex(COLUMN_AMT));
+                    dbString += "\n";*/
+                }
+                recordSet2.moveToNext();
+            }
+        }
+
+        db.close();
+
+
+        return result;
     }
 
     // add a user to the db
@@ -132,10 +171,10 @@ public class DBHandler extends SQLiteOpenHelper {
             recordSet.moveToNext();
         }
 
-        String query2 = "SELECT * FROM " + TABLE_DEBTS;
+        String query2 = "SELECT * FROM " + TABLE_DEBTS +" WHERE 1";
 
         //Cursor points to a location in your results
-        /*Cursor recordSet2 = db.rawQuery(query2, null);
+        Cursor recordSet2 = db.rawQuery(query2, null); // for the Debts table
         if (recordSet2.getCount() != 0) {
             //Move to the first row in your results
             recordSet2.moveToFirst();
@@ -143,14 +182,14 @@ public class DBHandler extends SQLiteOpenHelper {
             //Position after the last row means the end of the results
             while (!recordSet2.isAfterLast()) {
                 // null could happen if we used our empty constructor
-                if (recordSet2.getString(recordSet.getColumnIndex(COLUMN_OTHER_USR)) != null) {
-                    dbString += "Other User: " + recordSet2.getString(recordSet.getColumnIndex(COLUMN_OTHER_USR));
-                    dbString += " Amount: " + recordSet2.getString(recordSet.getColumnIndex(COLUMN_AMT));
+                if (recordSet2.getString(recordSet2.getColumnIndex(COLUMN_OTHER_USR)) != null) {
+                    dbString += "Other User: " + recordSet2.getString(recordSet2.getColumnIndex(COLUMN_OTHER_USR));
+                    dbString += " Amount: " + recordSet2.getString(recordSet2.getColumnIndex(COLUMN_AMT));
                     dbString += "\n";
                 }
                 recordSet2.moveToNext();
             }
-        }*/
+        }
 
         db.close();
         return dbString;

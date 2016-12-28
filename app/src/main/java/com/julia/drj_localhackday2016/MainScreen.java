@@ -13,6 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 /**
  * Created by Julia on 2016-12-03.
  */
@@ -31,6 +33,11 @@ public class MainScreen extends AppCompatActivity {
         setContentView(R.layout.mainscreen_layout);
         //list1 = (TextView)findViewById(R.id.item_list);
         list = new Button[max];
+
+        ArrayList<ArrayList<String>> debts = ((MyApp) this.getApplication()).getDebts();
+        for (int i=0; i<debts.size(); i++){
+            updateList("You", debts.get(i).get(0), debts.get(i).get(1));
+        }
 
         updateList("You", "Jan", "44");
         updateList("Bill", "You", "76");
@@ -72,7 +79,8 @@ public class MainScreen extends AppCompatActivity {
     View.OnClickListener btnClicked = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Object tag = v.getTag();
+            final Object tag = v.getTag();
+            final LinearLayout linear2 = (LinearLayout)findViewById(R.id.linear);
             new AlertDialog.Builder(context)
                     .setTitle("Confirm Payment")
                     .setMessage("Did payment occur?")
@@ -80,9 +88,13 @@ public class MainScreen extends AppCompatActivity {
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener(){
                         public void onClick(DialogInterface dialog, int whichButton){
                             Toast.makeText(getApplicationContext(), "Yay", Toast.LENGTH_SHORT).show();
+                            //list[Integer.parseInt(tag.toString())] = null;
+                            linear2.removeView(list[Integer.parseInt(tag.toString())]);
+
                         }
                     })
                     .setNegativeButton(android.R.string.no, null).show();
+
         }
     };
 }
