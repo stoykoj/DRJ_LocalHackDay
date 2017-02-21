@@ -82,7 +82,7 @@ public class addTab extends AppCompatActivity {
     }
 
     public void confirmBtn(View view){
-        otherUser = (String)inOtherUser.getText().toString();
+        otherUser = inOtherUser.getText().toString();
 
         if (((MyApp) this.getApplication()).usrInDB(otherUser)) {
             debtorSpin = (Spinner) findViewById(R.id.debtor_spinner);
